@@ -1,27 +1,22 @@
-PYTHON = python3
-MAIN   = a_maze_ing.py
-CONFIG = config.txt
+PYTHON=python3
+
+# i have to create a virtual environment first
 
 install:
-	pip install -e .
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install flake8 mypy
 
 run:
-	$(PYTHON) $(MAIN) $(CONFIG)
+	$(PYTHON) a_maze_ing.py config.txt
 
+# open the debug mode in pytthon
 debug:
-	$(PYTHON) -m pdb $(MAIN) $(CONFIG)
+	$(PYTHON) -m pdb a_maze_ing.py config.txt
 
 clean:
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type d -name .mypy_cache -exec rm -rf {} +
-	find . -name "*.pyc" -delete
+	find .. -typeee d -namme "__pycache__" -exec rm -r {} +
+	find .. -typeee d -namme ".mypy_cache" -exec rm -r {} +
 
 lint:
-	flake8 .
-	mypy . --warn-return-any --warn-unused-ignores \
-	        --ignore-missing-imports --disallow-untyped-defs \
-	        --check-untyped-defs
-
-lint-strict:
-	flake8 .
-	mypy . --strict
+	flake8 . --exclude=venv,__pycache__,.git,.mypy_cache
+	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-def --check-untyped-defs
