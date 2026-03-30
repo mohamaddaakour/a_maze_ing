@@ -2,6 +2,7 @@
 
 import sys
 from maze.parser import parse_config
+from maze.generator import Maze
 
 
 def main() -> None:
@@ -18,6 +19,15 @@ def main() -> None:
 
     print("Config loaded successfully:")
     print(config)
+
+    maze = Maze(5, 5)
+    cell1 = maze.get_cell(0, 0)
+    cell2 = maze.get_cell(1, 0)
+
+    maze.remove_wall_between(cell1, cell2)
+
+    print(cell1.walls)
+    print(cell2.walls)
 
 
 if __name__ == "__main__":
