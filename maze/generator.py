@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List
+import random
 
 # Directions (bitmask)
 NORTH = 1  # 0001
@@ -33,6 +34,7 @@ class Maze:
         self.grid: List[List[Cell]] = [
             [Cell(x, y) for x in range(width)] for y in range(height)
         ]
+        self.visited = set()
 
     def in_bounds(self, x: int, y: int) -> bool:
         return 0 <= x < self.width and 0 <= y < self.height
@@ -75,3 +77,40 @@ class Maze:
         elif dy == -1:
             current.remove_wall(NORTH)
             neighbor.remove_wall(SOUTH)
+
+    
+    def get_unvisited_neighbors(self, cell: Cell):
+        neighbors = []
+
+        for neighbor, wall, opposite in self.get_neighbors(cell):
+            if (neighbor.x, neighbor.y) not in self.visited:
+                neighbors.append((neighbor, wall, opposite))
+
+        return neighbors
+    
+    def generate(self, start_x: int = 0, start_y: int = 0) -> None:
+        stack = []
+
+        start = self.get_cell(start_x, start_y)
+        stack.append(start)
+        self.visited.add((start.x, start.y))
+
+        while stack:
+            current = stack[-1]
+
+            neighbors = self.get_unvisited_neighbors(current)
+
+            if neighbors:
+                neighbor, wall, opposite = random.choice(neighbors)
+
+                # Remove wall between current and neighbor
+                self.remove_wall_between(current, neighbor)
+
+                # Mark visited
+                self.visited.add((neighbor.x, neighbor.y))
+
+                # Go deeper
+                stack.append(neighbor)
+            else:
+                # Backtrack
+                stack.pop()
