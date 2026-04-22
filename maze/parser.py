@@ -16,7 +16,7 @@ class Config:
 def read_config_file(filepath: str) -> list[str]:
     try:
         with open(filepath, "r", encoding="utf-8") as file:
-            # this will create a list and each is an element in it?
+            # this will create a list and each is an element in it
             return file.readlines()
     except FileNotFoundError:
         raise ValueError(f"config file not found: {filepath}")
@@ -49,7 +49,6 @@ def parse_tuple(value: str) -> tuple[int, int]:
 
 
 def parse_bool(value: str) -> bool:
-    # Ensured both conditions use .lower()
     if value.lower() == "false":
         return False
 

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 import random
 
-# Directions (bitmask)
+# directions (bitmask)
 NORTH = 1  # 0001
 EAST = 2   # 0010
 SOUTH = 4  # 0100

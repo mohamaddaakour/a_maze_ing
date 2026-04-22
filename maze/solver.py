@@ -5,19 +5,10 @@ from maze.generator import Maze, Cell
 
 
 class MazeSolver:
-    """
-    Solves a maze using BFS to find the shortest path.
-    """
-
     def __init__(self, maze: Maze) -> None:
         self.maze = maze
 
     def solve(self, start: Tuple[int, int], end: Tuple[int, int]) -> List[Tuple[int, int]]:
-        """
-        Find shortest path from start to end using BFS.
-        Returns list of coordinates [(x,y), ...]
-        """
-
         queue = deque()
         queue.append(start)
 
@@ -40,8 +31,6 @@ class MazeSolver:
                 if (nx, ny) in visited:
                     continue
 
-                # IMPORTANT: check if wall exists
-                # If wall bit is set → you cannot pass
                 if current_cell.walls & wall:
                     continue
 
@@ -49,12 +38,11 @@ class MazeSolver:
                 parent[(nx, ny)] = (x, y)
                 queue.append((nx, ny))
 
-        # Reconstruct path
         path: List[Tuple[int, int]] = []
         node = end
 
         if node not in parent and node != start:
-            return []  # no path found (should not happen in valid maze)
+            return []
 
         while node != start:
             path.append(node)
