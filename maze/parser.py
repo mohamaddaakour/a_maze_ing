@@ -10,18 +10,22 @@ class Config:
     entry: Tuple[int, int]
     exit: Tuple[int, int]
     output_file: str
+
+    # if it is true so we have only one path between entry and exit
     perfect: bool
 
 
 def read_config_file(filepath: str) -> list[str]:
     try:
+        # we use encoding to enable the use of all languages
         with open(filepath, "r", encoding="utf-8") as file:
-            # this will create a list and each is an element in it
+            # this will create a list and each line in the file is an element in this list
             return file.readlines()
     except FileNotFoundError:
         raise ValueError(f"config file not found: {filepath}")
 
 
+# now we will take the list of string and convert it into a dictionary
 def parse_lines(lines: list[str]) -> dict[str, str]:
     config_dict: dict[str, str] = {}
 
@@ -40,6 +44,7 @@ def parse_lines(lines: list[str]) -> dict[str, str]:
     return config_dict
 
 
+# if the value is a tuple, like in entry and exit cases
 def parse_tuple(value: str) -> tuple[int, int]:
     try:
         x, y = value.split(",")
@@ -48,6 +53,7 @@ def parse_tuple(value: str) -> tuple[int, int]:
         raise ValueError(f"Invalid tuple format: {value}")
 
 
+# in case the value is bool, like perfect
 def parse_bool(value: str) -> bool:
     if value.lower() == "false":
         return False
@@ -58,6 +64,7 @@ def parse_bool(value: str) -> bool:
     raise ValueError(f"Invalid boolean: {value}")
 
 
+# we apply the parsing functions
 def build_config(data: dict[str, str]) -> Config:
     required_keys = [
         "WIDTH",
@@ -95,6 +102,7 @@ def build_config(data: dict[str, str]) -> Config:
     return Config(width, height, entry, exit_, output_file, perfect)
 
 
+# we put everything together
 def parse_config(filepath: str) -> Config:
     lines = read_config_file(filepath)
     data = parse_lines(lines)

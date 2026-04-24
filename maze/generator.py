@@ -32,6 +32,7 @@ class Maze:
         self.width = width
         self.height = height
         self.grid: List[List[Cell]] = [
+            # x will iterate first and after it the y
             [Cell(x, y) for x in range(width)] for y in range(height)
         ]
         self.visited = set()
@@ -42,6 +43,7 @@ class Maze:
     def get_cell(self, x: int, y: int) -> Cell:
         return self.grid[y][x]
 
+    # we are getting neighbors of a specific cell
     def get_neighbors(self, cell: Cell) -> List[tuple[Cell, int, int]]:
         neighbors = []
 
@@ -101,16 +103,12 @@ class Maze:
             neighbors = self.get_unvisited_neighbors(current)
 
             if neighbors:
-                neighbor, wall, opposite = random.choice(neighbors)
+                neighbor = random.choice(neighbors)
 
-                # Remove wall between current and neighbor
                 self.remove_wall_between(current, neighbor)
 
-                # Mark visited
                 self.visited.add((neighbor.x, neighbor.y))
 
-                # Go deeper
                 stack.append(neighbor)
             else:
-                # Backtrack
                 stack.pop()
